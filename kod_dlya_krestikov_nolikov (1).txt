@@ -1,0 +1,59 @@
+import sys
+
+wins_line = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
+def draw_plank(plank):
+    print("--------------")
+    for i in range(3):
+        print("", plank[0 + i *3], plank[1 + i * 3], plank[2 + i *3], "", sep=' | ')
+    print("--------------")
+
+def take_input(player_symbol, plank):
+    while True:
+        value = input('where put :' +player_symbol + '?')
+        if not (value in '123456789'):
+            print('error input.try again')
+            continue
+        value = int(value)
+        if str(plank[value - 1]) in 'XO':
+            print('this cell is already occupied')
+            continue
+        plank[value - 1] = player_symbol
+        break
+
+def check_win(wins_line, plank):
+    size = 3 # TODO Можно будет переписать в общий вид
+    for n in range(3):
+        if plank[n] == plank[size+n] == plank[2*size+n]: # Проверка вертикалей
+            return sys.exit('Победа!')
+        if plank[n*size] == plank[n*size+1] == plank[n*size+2]: # Проверка горизонталей
+            return sys.exit('Победа!')
+        if plank[0] == plank[4] == plank[8]:
+            return sys.exit('Победа!')
+        if plank[2] == plank[4] == plank[6]:
+            return sys.exit('Победа!')
+
+def draw_exam(check_draw):  # функция проверки на ничью
+    for val in check_draw:
+        if val in list(range(1, 10)):
+            return
+    return sys.exit("Ничья")
+
+def main():
+    plank = list(range(1, 10))
+    step = 0
+    while True:
+        draw_plank(plank)
+        if step % 2 == 0:
+            take_input('X', plank)
+            print(plank)
+            check_win(wins_line, plank)
+            draw_exam(plank)
+        else:
+            take_input('O', plank)
+            print(plank)
+            check_win(wins_line, plank)
+            draw_exam(plank)
+        step+=-1
+
+
+main()
